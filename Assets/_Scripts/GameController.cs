@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Linq;
 /// <summary>
 /// Victoria Liu
 /// 301028404
@@ -24,15 +26,18 @@ public class GameController : MonoBehaviour
     [Header("Scoreboard")]
     [SerializeField]
     private int _lives;
+
     [SerializeField]
     private int _score;
 
-   
+
     public Text livesLabel;
     public Text scoreLabel;
     public Text highScoreLabel;
 
     //public HighScoreSO highScoreSO;
+
+
 
     [Header("UI Control")]
     public GameObject startLabel;
@@ -43,6 +48,9 @@ public class GameController : MonoBehaviour
     [Header("Game Settings")]
     public ScoreBoard scoreBoard;
 
+    [Header("Scene Settings")]
+    public SceneSettings activeSceneSettings;
+    public List<SceneSettings> sceneSettings;
 
     // public properties
     public int Lives
@@ -55,16 +63,17 @@ public class GameController : MonoBehaviour
         set
         {
             _lives = value;
-            if(_lives < 1)
+            scoreBoard.lives = _lives;
+            if (_lives < 1)
             {
-                
+
                 SceneManager.LoadScene("End");
             }
             else
             {
                 livesLabel.text = "Lives: " + _lives;
             }
-           
+
         }
     }
 
@@ -78,13 +87,13 @@ public class GameController : MonoBehaviour
         set
         {
             _score = value;
-
+            scoreBoard.score = _score;
 
             if (scoreBoard.highScore < _score)
             //if (highScoreSO.score < _score)
             {
                 scoreBoard.highScore = _score;
-                
+
             }
             scoreLabel.text = "Score: " + _score;
         }
@@ -113,36 +122,41 @@ public class GameController : MonoBehaviour
 
     private void SceneConfiguration()
     {
-        switch (SceneManager.GetActiveScene().name)
-        {
-            case "Start":
-                scoreLabel.enabled = false;
-                livesLabel.enabled = false;
-                highScoreLabel.enabled = false;
-                endLabel.SetActive(false);
-                restartButton.SetActive(false);
-                activeSoundClip = SoundClip.NONE;
-                break;
-            case "Main":
-                highScoreLabel.enabled = false;
-                startLabel.SetActive(false);
-                startButton.SetActive(false);
-                endLabel.SetActive(false);
-                restartButton.SetActive(false);
-                activeSoundClip = SoundClip.ENGINE;
-                break;
-            case "End":
-                scoreLabel.enabled = false;
-                livesLabel.enabled = false;
-                startLabel.SetActive(false);
-                startButton.SetActive(false);
-                activeSoundClip = SoundClip.NONE;
-                highScoreLabel.text = "High Score: " + scoreBoard.highScore;
-                break;
-        }
+        //selects the current scene
+        Scene sceneToCompare = (Scene) Enum.Parse(typeof(Scene),
+                        SceneManager.GetActiveScene().name.ToUpper());
 
-        Lives = 5;
-        Score = 0;
+        //compares the current scene with the setting list
+        var query = from settings in sceneSettings
+                where settings.scene == sceneToCompare
+                select settings;
+
+        //query the list and find the first match sets it to the correct scene
+        activeSceneSettings = query.ToList().First();
+        
+        {
+            //chekcis main scene is active and sets up the initial values for score and lives
+            if (activeSceneSettings.scene == Scene.MAIN)
+	        {
+                Lives = 5;
+                Score = 0;
+	        }
+            
+            //appplies all scenesettings from the scriptable object
+            activeSoundClip = activeSceneSettings.activeSoundClip;;  
+            scoreLabel.enabled = activeSceneSettings.scoreLabelActive;
+            livesLabel.enabled = activeSceneSettings.LivesLabelActive;
+            highScoreLabel.enabled = activeSceneSettings.highScoreLabelActive;
+            startLabel.SetActive(activeSceneSettings.startLabelActive);
+            endLabel.SetActive(activeSceneSettings.endLabelActive);
+            startButton.SetActive(activeSceneSettings.startButtonActive);
+            restartButton.SetActive(activeSceneSettings.restartButtonActive); 
+
+            //score values being assigned
+            highScoreLabel.text = "High Score: " + scoreBoard.highScore;
+            livesLabel.text = "Lives: " + scoreBoard.lives;
+            scoreLabel.text = "Score: " + scoreBoard.score;
+        }
 
 
         if ((activeSoundClip != SoundClip.NONE) && (activeSoundClip != SoundClip.NUM_OF_CLIPS))
@@ -167,11 +181,6 @@ public class GameController : MonoBehaviour
         Instantiate(island);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     // Event Handlers
     public void OnStartButtonClick()

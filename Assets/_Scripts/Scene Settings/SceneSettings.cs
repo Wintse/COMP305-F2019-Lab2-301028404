@@ -11,6 +11,7 @@ using UnityEngine;
 public class SceneSettings : ScriptableObject
 {
     [Header("Scene Config")]
+    public Scene scene;
     public SoundClip activeSoundClip;
 
     [Header("Scoreboard labels")]
