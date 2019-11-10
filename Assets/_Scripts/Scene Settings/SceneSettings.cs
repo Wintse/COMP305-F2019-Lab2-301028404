@@ -20,10 +20,10 @@ public class SceneSettings : ScriptableObject
     public bool highScoreLabelEnabled;
 
     [Header("Scene Label ")]
-    public bool startLabelSetActive;
-    public bool endLabelSetActive;
+    public bool startLabelActive;
+    public bool endLabelActive;
 
     [Header("Scene Buttons")]
-    public bool startButtonSetActive;
-    public bool restartButtonSetActive;
+    public bool startButtonActive;
+    public bool restartButtonActive;
 }

@@ -355,6 +355,6 @@ MonoBehaviour:
   scoreBoard: {fileID: 11400000, guid: 3aea80e304001bc41baa7fdf6995713a, type: 2}
   activeSceneSettings: {fileID: 0}
   sceneSettings:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: e8ed6cd6ef886dd4fb01de3ff01e3f67, type: 2}
+  - {fileID: 11400000, guid: 36a790af2a3faf64b897a0051a8f19f5, type: 2}
+  - {fileID: 11400000, guid: 7f7ed2619d567794e912e091088b126f, type: 2}

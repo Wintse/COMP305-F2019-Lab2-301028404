@@ -90,7 +90,6 @@ public class GameController : MonoBehaviour
             scoreBoard.score = _score;
 
             if (scoreBoard.highScore < _score)
-            //if (highScoreSO.score < _score)
             {
                 scoreBoard.highScore = _score;
 
@@ -123,17 +122,17 @@ public class GameController : MonoBehaviour
     private void SceneConfiguration()
     {
         //selects the current scene
-        Scene sceneToCompare = (Scene) Enum.Parse(typeof(Scene),
-                        SceneManager.GetActiveScene().name.ToUpper());
+        Scene sceneToCompare = (Scene)Enum.Parse(typeof(Scene),
+            SceneManager.GetActiveScene().name.ToUpper());
 
         //compares the current scene with the setting list
         var query = from settings in sceneSettings
-                where settings.scene == sceneToCompare
-                select settings;
+                    where settings.scene == sceneToCompare
+                    select settings;
 
         //query the list and find the first match sets it to the correct scene
         activeSceneSettings = query.ToList().First();
-        
+
         {
             //chekcis main scene is active and sets up the initial values for score and lives
             if (activeSceneSettings.scene == Scene.MAIN)
@@ -141,21 +140,21 @@ public class GameController : MonoBehaviour
                 Lives = 5;
                 Score = 0;
 	        }
-            
+
             //appplies all scenesettings from the scriptable object
-            activeSoundClip = activeSceneSettings.activeSoundClip;;  
-            scoreLabel.enabled = activeSceneSettings.scoreLabelActive;
-            livesLabel.enabled = activeSceneSettings.LivesLabelActive;
-            highScoreLabel.enabled = activeSceneSettings.highScoreLabelActive;
+            activeSoundClip = activeSceneSettings.activeSoundClip;
+            scoreLabel.enabled = activeSceneSettings.scoreLabelEnabled;
+            livesLabel.enabled = activeSceneSettings.livesLabelEnabled;
+            highScoreLabel.enabled = activeSceneSettings.highScoreLabelEnabled;
             startLabel.SetActive(activeSceneSettings.startLabelActive);
             endLabel.SetActive(activeSceneSettings.endLabelActive);
             startButton.SetActive(activeSceneSettings.startButtonActive);
-            restartButton.SetActive(activeSceneSettings.restartButtonActive); 
+            restartButton.SetActive(activeSceneSettings.restartButtonActive);
 
             //score values being assigned
-            highScoreLabel.text = "High Score: " + scoreBoard.highScore;
             livesLabel.text = "Lives: " + scoreBoard.lives;
             scoreLabel.text = "Score: " + scoreBoard.score;
+            highScoreLabel.text = "High Score: " + scoreBoard.highScore;
         }
 
 

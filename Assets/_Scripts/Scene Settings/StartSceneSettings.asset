@@ -12,3 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847cb4ff7e2adba4cba085f8addd44fe, type: 3}
   m_Name: StartSceneSettings
   m_EditorClassIdentifier: Assembly-CSharp::SceneSettings
+  scene: 0
+  activeSoundClip: -1
+  scoreLabelEnabled: 0
+  livesLabelEnabled: 0
+  highScoreLabelEnabled: 0
+  startLabelActive: 1
+  endLabelActive: 0
+  startButtonActive: 1
+  restartButtonActive: 0
